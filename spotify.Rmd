@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
+pacman::p_load(tidyverse)
 # Get the Data
 
 spotify_songs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
@@ -26,5 +27,37 @@ tuesdata <- tidytuesdayR::tt_load(2020, week = 4)
 
 
 spotify_songs <- tuesdata$spotify_songs
+```
+
+```{r}
+spotify_songs %>% 
+  ggplot(aes(x = playlist_genre)) + 
+  geom_bar() 
+```
+
+```{r}
+dat <- spotify_songs %>% 
+  select(track_popularity, playlist_genre, danceability:tempo, playlist_subgenre) 
+
+dat %>%
+  pivot_longer(danceability:tempo, names_to = "Var", values_to = "Score") %>% 
+  ## filter(playlist_genre == "edm") %>% 
+  ggplot(aes(y = Score, x = Var, color = Var))+
+  geom_boxplot()
+```
+
+```{r}
+dat %>% 
+  ggplot(aes(x = danceability, y = track_popularity ))+
+  geom_point()+
+  facet_wrap(~ playlist_genre)
+```
+
+
+```{r}
+dat %>% 
+  ggplot(aes(x = playlist_subgenre , y = track_popularity , color = playlist_subgenre))+
+  geom_boxplot()+
+  facet_wrap(~ playlist_genre)
 ```
 
