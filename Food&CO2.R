@@ -27,6 +27,7 @@ mutate(co2_per_cons = sum(co2_emmission)/sum(Consumption),
        insight = case_when(Food == "Goat" ~ "Goat",
                            Food == "Cows" ~ "Cows",
                            Food != "Goat" | Food != "Cows" ~ "Else"))
+
 p <- p %>% 
   group_by(Food, insight) %>% 
   summarise(co2 = sum(co2_emmission)/sum(Consumption) )
